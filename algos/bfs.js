@@ -1,12 +1,12 @@
-function breadthFirstSearch(box) {
+function breathFirstSearch(box) {
   let indx = box.getAttribute("data-idx"),
     idx = parseInt(indx);
   //push node that is clicked
   queue.push(boxes[idx]);
-  breadthFirstSearchUtil();
+  breathFirstSearchUtil();
 }
 
-function breadthFirstSearchUtil() {
+function breathFirstSearchUtil() {
   let currentStartBox = queue.shift(),
     indx = currentStartBox.getAttribute("data-idx"),
     idx = parseInt(indx); // convert string number to number
@@ -59,7 +59,7 @@ function breadthFirstSearchUtil() {
 
   setTimeout(() => {
     if (!(endIdx == idx)) {
-      breadthFirstSearchUtil();
+      breathFirstSearchUtil();
     }
   }, delay);
 }
