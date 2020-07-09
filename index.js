@@ -219,6 +219,5 @@ btn.addEventListener("click", () => {
     algoLabel.innerText = "Pick An Algorithm";
     return;
   }
-  let algo = algoLabel.innerText;
   algorithms[whichAlgo](start);
 });
