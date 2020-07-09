@@ -33,7 +33,6 @@ function breadthFirstSearchUtil() {
 
   //check if left box exist and if already visied
   if (boxes[idx - 1] && !visited[idx - 1] && !checkForLeftMost) {
-    // currentStartBox.style.background = `#${clr}`;
     queue.push(boxes[idx - 1]);
     visited[idx - 1] = true;
     prev[idx - 1] = idx;
