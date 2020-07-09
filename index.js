@@ -18,7 +18,7 @@ var started = false,
   whichNodeToMove = null,
   algorithms = {
     bfs: function (start) {
-      breathFirstSearch(start);
+      breadthFirstSearch(start);
     },
   },
   selected = false,
