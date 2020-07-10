@@ -1,8 +1,8 @@
-let started = false,
-  visited = [],
+let visited = [],
   queue = [],
   length = 40,
-  btn = document.querySelector(".start_btn"),
+  start_btn = document.querySelector(".start_btn"),
+  clear_path = document.querySelector(".clear"),
   wrapper = document.querySelector(".box_wrapper"),
   delay = 0.01,
   prev = [],
@@ -205,11 +205,25 @@ wrapper.addEventListener("mouseup", function (event) {
   mouseDown = false;
 });
 
-btn.addEventListener("click", () => {
+start_btn.addEventListener("click", () => {
   if (!selected) {
     algoLabel.innerText = "Pick An Algorithm";
     return;
   }
-  started = true;
+
   algorithms[whichAlgo](start);
+});
+
+clear_path.addEventListener("click", () => {
+  for (let i = 0; i < boxes.length; i++) {
+    const box = boxes[i];
+    box.classList.remove("visited");
+    box.classList.remove("shortest_path");
+    box.classList.remove("animate");
+    box.removeAttribute("style");
+    visited[i] = null;
+  }
+  queue = [];
+  visited = [];
+  start = document.querySelector(".start");
 });
