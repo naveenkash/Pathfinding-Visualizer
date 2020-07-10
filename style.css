@@ -138,6 +138,13 @@
   box-shadow: 0px 2px 13px 1px rgba(166, 166, 166, 1);
 }
 
+.clear {
+  width: auto;
+  height: 40px;
+  margin-left: 25px;
+  padding: 0 14px;
+}
+
 .animate {
   animation: scale-bkg 0.3s ease-in 0.3s;
 }
@@ -163,6 +170,7 @@
 .shortest_path {
   background: #ffff00;
 }
+
 @keyframes scale-bkg {
   0% {
     transform: scale(1);
