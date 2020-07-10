@@ -44,7 +44,7 @@
 .dropdown {
   width: 250px;
   height: 40px;
-  background: #000b22;
+  background: #15202b;
   margin-left: 25px;
   border-radius: 6px;
   position: relative;
@@ -56,7 +56,7 @@
 .algo-info {
   width: 100%;
   height: 100%;
-  background: #000b22;
+  background: #15202b;
   cursor: pointer;
   border-radius: 6px;
   z-index: 10;
@@ -93,7 +93,7 @@
   list-style-type: none;
   width: 100%;
   height: auto;
-  background: #000b22;
+  background: #15202b;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   padding: 8px 4px;
@@ -118,7 +118,7 @@
   background: #87adff44;
   color: #87aeff;
 }
-.start {
+.start_btn {
   width: 80px;
   height: 40px;
   color: white;
@@ -126,7 +126,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000b22;
+  background: #15202b;
   cursor: pointer;
   border-radius: 6px;
   letter-spacing: 1.5px;
@@ -141,15 +141,28 @@
 .animate {
   animation: scale-bkg 0.3s ease-in 0.3s;
 }
-.s_node {
+.start {
   background: green !important;
   cursor: grab;
+  transition: 0.3s;
 }
-.e_node {
+.end {
   background: red !important;
   cursor: grab;
+  transition: 0.3s;
 }
 
+.visited {
+  background: #cb6bff;
+}
+
+.wall {
+  background: #15202b !important;
+}
+
+.shortest_path {
+  background: #ffff00;
+}
 @keyframes scale-bkg {
   0% {
     transform: scale(1);

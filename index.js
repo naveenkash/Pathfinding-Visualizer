@@ -1,8 +1,8 @@
-var started = false,
+let started = false,
   visited = [],
   queue = [],
   length = 40,
-  btn = document.querySelector(".start"),
+  btn = document.querySelector(".start_btn"),
   wrapper = document.querySelector(".box_wrapper"),
   delay = 0.01,
   prev = [],
@@ -41,21 +41,21 @@ let boxes = document.querySelectorAll(".box"),
   start = null,
   end = null,
   endIdx = 0,
-  startIdx = 0;
+  startIdx = 0,
+  mouseDown = false;
 
+var dragged = null;
 for (let i = 0; i < boxes.length; i++) {
   let box = boxes[i];
   box.setAttribute("data-idx", i);
   if (i == 285) {
     startIdx = i;
-    box.classList.add("s_node");
-    box.setAttribute("draggable", true);
+    box.classList.add("start");
     start = box;
   }
   if (i == 1310) {
     endIdx = i;
-    box.classList.add("e_node");
-    box.setAttribute("draggable", true);
+    box.classList.add("end");
     end = box;
   }
 
@@ -96,122 +96,113 @@ for (let j = 0; j < dropDownItems.length; j++) {
   });
 }
 
-start.addEventListener("dragstart", function (event) {
+wrapper.addEventListener("mousedown", function (event) {
+  event.preventDefault();
   event.stopPropagation();
-  if (event.target == this) {
+  mouseDown = true;
+  if (event.target.classList.contains("start")) {
     draggedStart = event.target;
-  } else {
-    draggedStart = event.target.parentNode;
+    whichNodeToMove = "start";
   }
-  whichNodeToMove = "start";
-});
-
-end.addEventListener("dragstart", function (event) {
-  event.stopPropagation();
-  if (event.target == this) {
+  if (event.target.classList.contains("end")) {
     draggedEnd = event.target;
-  } else {
-    draggedEnd = event.target.parentNode;
-  }
-  whichNodeToMove = "end";
-});
-
-wrapper.addEventListener("dragover", function (event) {
-  event.preventDefault();
-});
-
-wrapper.addEventListener("dragenter", function (event) {
-  event.preventDefault();
-  if (whichNodeToMove == "start") {
-    if (
-      !event.target.classList.contains("e_node") &&
-      event.target.classList.contains("box") &&
-      !event.target.classList.contains("s_node")
-    ) {
-      event.target.classList.add("s_node");
-      currentStart = event.target; // the current element we are on
-      draggedStart.classList.remove("s_node");
-    }
-  } else if (whichNodeToMove == "end") {
-    if (
-      !event.target.classList.contains("e_node") &&
-      event.target.classList.contains("box") &&
-      !event.target.classList.contains("s_node")
-    ) {
-      event.target.classList.add("e_node");
-      currentEnd = event.target; // the current element we are on
-      draggedEnd.classList.remove("e_node");
-    }
+    whichNodeToMove = "end";
   }
 });
 
-wrapper.addEventListener("dragleave", function (event) {
-  event.preventDefault();
-  setTimeout(() => {
-    if (
-      whichNodeToMove == "start" &&
-      event.target != currentStart &&
-      event.target != draggedStart
-    ) {
-      event.target.classList.remove("s_node");
+document.addEventListener("mousemove", function (event) {
+  if (mouseDown && event.target.contains(wrapper)) {
+    mouseDown = false;
+    // set current node to start if mouse move of wrapper while being pressed
+    if (whichNodeToMove == "start") {
+      let startNode = document.querySelector(".start");
+      draggedStart = startNode;
+      start = startNode;
+      let idx = parseInt(startNode.getAttribute("data-idx"));
+      startIdx = idx;
+    } else if (whichNodeToMove == "end") {
+      let endNode = document.querySelector(".end");
+      draggedEnd = endNode;
+      end = endNode;
+      let idx2 = parseInt(endNode.getAttribute("data-idx"));
+      endIdx = idx2;
     }
-    if (
-      whichNodeToMove == "end" &&
-      event.target != currentEnd &&
-      event.target != draggedEnd
-    ) {
-      event.target.classList.remove("e_node");
-    }
-  }, 20);
+    whichNodeToMove = "";
+  }
 });
 
-wrapper.addEventListener("drop", function (event) {
+wrapper.addEventListener("mouseover", function (event) {
+  event.preventDefault();
+  if (mouseDown) {
+    if (whichNodeToMove == "start") {
+      if (
+        !event.target.classList.contains("end") &&
+        !event.target.classList.contains("start") &&
+        event.target != currentStart &&
+        event.target != wrapper
+      ) {
+        if (currentStart) {
+          currentStart.classList.remove("start");
+        }
+        event.target.classList.add("start");
+        currentStart = event.target; // the current element we are on
+        draggedStart.classList.remove("start");
+      }
+    } else if (whichNodeToMove == "end") {
+      if (
+        !event.target.classList.contains("start") &&
+        !event.target.classList.contains("end") &&
+        event.target != currentEnd &&
+        event.target != wrapper
+      ) {
+        if (currentEnd) {
+          currentEnd.classList.remove("end");
+        }
+        event.target.classList.add("end");
+        currentEnd = event.target; // the current element we are on
+        draggedEnd.classList.remove("end");
+      }
+    } else {
+      if (
+        !event.target.classList.contains("start") &&
+        !event.target.classList.contains("end") &&
+        !event.target.classList.contains("wall")
+      ) {
+        event.target.classList.add("wall");
+      } else if (event.target.classList.contains("wall")) {
+        event.target.classList.remove("wall");
+      }
+    }
+  }
+});
+
+wrapper.addEventListener("mouseup", function (event) {
   event.preventDefault();
   event.stopPropagation();
-  let node = event.target;
-
-  if (
-    whichNodeToMove == "start" &&
-    !event.target.classList.contains("e_node")
-  ) {
-    node.classList.add("s_node");
-    node.setAttribute("draggable", true);
-    draggedStart.classList.remove("s_node");
-    draggedStart.removeAttribute("draggable");
-    draggedStart = node;
-    start = node;
-    let idx = parseInt(start.getAttribute("data-idx"));
-    startIdx = idx;
-    start.addEventListener("dragstart", function (event) {
-      event.stopPropagation();
-      if (event.target == this) {
-        draggedStart = event.target;
-      } else {
-        draggedStart = event.target.parentNode;
+  if (mouseDown) {
+    let node = event.target;
+    if (whichNodeToMove == "start") {
+      if (!event.target.classList.contains("end")) {
+        node.classList.add("start");
       }
-      whichNodeToMove = "start";
-    });
-  }
+      draggedStart = node;
+      start = node;
+      let idx = parseInt(start.getAttribute("data-idx"));
+      startIdx = idx;
+    }
 
-  if (whichNodeToMove == "end" && !event.target.classList.contains("s_node")) {
-    node.classList.add("e_node");
-    node.setAttribute("draggable", true);
-    draggedEnd.classList.remove("e_node");
-    draggedEnd.removeAttribute("draggable");
-    draggedEnd = node;
-    end = node;
-    let idx = parseInt(end.getAttribute("data-idx"));
-    endIdx = idx;
-    end.addEventListener("dragstart", function (event) {
-      event.stopPropagation();
-      if (event.target == this) {
-        draggedEnd = event.target;
-      } else {
-        draggedEnd = event.target.parentNode;
+    if (whichNodeToMove == "end") {
+      if (!event.target.classList.contains("start")) {
+        node.classList.add("end");
       }
-      whichNodeToMove = "end";
-    });
+      draggedEnd = node;
+      end = node;
+      let idx = parseInt(end.getAttribute("data-idx"));
+      endIdx = idx;
+    }
   }
+  whichNodeToMove = "";
+  mouseDown = false;
 });
 
 btn.addEventListener("click", () => {
@@ -219,5 +210,6 @@ btn.addEventListener("click", () => {
     algoLabel.innerText = "Pick An Algorithm";
     return;
   }
+  started = true;
   algorithms[whichAlgo](start);
 });
