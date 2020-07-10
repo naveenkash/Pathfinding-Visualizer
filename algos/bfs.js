@@ -18,39 +18,57 @@ function breadthFirstSearchUtil() {
         return;
       }
       if (i != endIdx) {
-        boxes[i].style.background = "yellow";
+        boxes[i].classList.add("shortest_path");
       }
       // path.push(i); // path we took get to end node and  reverse it to print
     }
     return;
   }
   if (currentStartBox != start && currentStartBox != end) {
-    currentStartBox.style.background = `#cb6bff`;
+    currentStartBox.classList.add("visited");
   }
   currentStartBox.classList.add("animate");
   currentStartBox.style.animationDelay = `${delay}s`;
   currentStartBox.style.transitionDelay = `${delay}s`;
 
   //check if left box exist and if already visied
-  if (boxes[idx - 1] && !visited[idx - 1] && !checkForLeftMost) {
+  if (
+    boxes[idx - 1] &&
+    !visited[idx - 1] &&
+    !checkForLeftMost &&
+    !boxes[idx - 1].classList.contains("wall")
+  ) {
     queue.push(boxes[idx - 1]);
     visited[idx - 1] = true;
     prev[idx - 1] = idx;
   }
   //check if right box exist and if already visied
-  if (boxes[idx + 1] && !visited[idx + 1] && !checkForRightMost) {
+  if (
+    boxes[idx + 1] &&
+    !visited[idx + 1] &&
+    !checkForRightMost &&
+    !boxes[idx + 1].classList.contains("wall")
+  ) {
     queue.push(boxes[idx + 1]);
     visited[idx + 1] = true;
     prev[idx + 1] = idx;
   }
   //check if top box exist and if already visied
-  if (boxes[idx - length] && !visited[idx - length]) {
+  if (
+    boxes[idx - length] &&
+    !visited[idx - length] &&
+    !boxes[idx - length].classList.contains("wall")
+  ) {
     queue.push(boxes[idx - length]);
     visited[idx - length] = true;
     prev[idx - length] = idx;
   }
   //check if bottom box exist and if already visied
-  if (boxes[idx + length] && !visited[idx + length]) {
+  if (
+    boxes[idx + length] &&
+    !visited[idx + length] &&
+    !boxes[idx + length].classList.contains("wall")
+  ) {
     queue.push(boxes[idx + length]);
     visited[idx + length] = true;
     prev[idx + length] = idx;
