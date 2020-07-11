@@ -1,5 +1,7 @@
 let visited = [],
   queue = [],
+  distance = [],
+  cost = [],
   length = 40,
   start_btn = document.querySelector(".start_btn"),
   clear_path = document.querySelector(".clear"),
@@ -19,6 +21,9 @@ let visited = [],
   algorithms = {
     bfs: function (start) {
       breadthFirstSearch(start);
+    },
+    djs: function () {
+      dijkstra(start);
     },
   },
   selected = false,
@@ -44,7 +49,6 @@ let boxes = document.querySelectorAll(".box"),
   startIdx = 0,
   mouseDown = false;
 
-var dragged = null;
 for (let i = 0; i < boxes.length; i++) {
   let box = boxes[i];
   box.setAttribute("data-idx", i);
@@ -60,7 +64,13 @@ for (let i = 0; i < boxes.length; i++) {
   }
 
   visited[i] = false;
+  distance[i] = Infinity;
+  cost[i] = 1;
   prev[i] = null;
+}
+
+function getIndex(node) {
+  return parseInt(node.getAttribute("data-idx"));
 }
 
 let openDropDown = false;
@@ -99,18 +109,25 @@ for (let j = 0; j < dropDownItems.length; j++) {
 wrapper.addEventListener("mousedown", function (event) {
   event.preventDefault();
   event.stopPropagation();
-  mouseDown = true;
-  if (event.target.classList.contains("start")) {
-    draggedStart = event.target;
-    whichNodeToMove = "start";
-  }
-  if (event.target.classList.contains("end")) {
-    draggedEnd = event.target;
-    whichNodeToMove = "end";
-  }
+  dragNodes();
 });
 
 document.addEventListener("mousemove", function (event) {
+  setCurrentBoxIfMouseOutOfContainer();
+});
+
+wrapper.addEventListener("mouseover", function (event) {
+  event.preventDefault();
+  moveNodesOnDrag();
+});
+
+wrapper.addEventListener("mouseup", function (event) {
+  event.preventDefault();
+  event.stopPropagation();
+  setNodeWhenMouseLifted();
+});
+
+function setCurrentBoxIfMouseOutOfContainer() {
   if (mouseDown && event.target.contains(wrapper)) {
     mouseDown = false;
     // set current node to start if mouse move of wrapper while being pressed
@@ -129,10 +146,48 @@ document.addEventListener("mousemove", function (event) {
     }
     whichNodeToMove = "";
   }
-});
+}
 
-wrapper.addEventListener("mouseover", function (event) {
-  event.preventDefault();
+function dragNodes() {
+  mouseDown = true;
+  if (event.target.classList.contains("start")) {
+    draggedStart = event.target;
+    whichNodeToMove = "start";
+  }
+  if (event.target.classList.contains("end")) {
+    draggedEnd = event.target;
+    whichNodeToMove = "end";
+  }
+}
+
+function setNodeWhenMouseLifted() {
+  if (mouseDown) {
+    let node = event.target;
+    if (whichNodeToMove == "start") {
+      if (!event.target.classList.contains("end")) {
+        node.classList.add("start");
+      }
+      draggedStart = node;
+      start = node;
+      let idx = parseInt(start.getAttribute("data-idx"));
+      startIdx = idx;
+    }
+
+    if (whichNodeToMove == "end") {
+      if (!event.target.classList.contains("start")) {
+        node.classList.add("end");
+      }
+      draggedEnd = node;
+      end = node;
+      let idx = parseInt(end.getAttribute("data-idx"));
+      endIdx = idx;
+    }
+  }
+  whichNodeToMove = "";
+  mouseDown = false;
+}
+
+function moveNodesOnDrag() {
   if (mouseDown) {
     if (whichNodeToMove == "start") {
       if (
@@ -166,7 +221,8 @@ wrapper.addEventListener("mouseover", function (event) {
       if (
         !event.target.classList.contains("start") &&
         !event.target.classList.contains("end") &&
-        !event.target.classList.contains("wall")
+        !event.target.classList.contains("wall") &&
+        !event.target.contains(wrapper)
       ) {
         event.target.classList.add("wall");
       } else if (event.target.classList.contains("wall")) {
@@ -174,56 +230,39 @@ wrapper.addEventListener("mouseover", function (event) {
       }
     }
   }
-});
-
-wrapper.addEventListener("mouseup", function (event) {
-  event.preventDefault();
-  event.stopPropagation();
-  if (mouseDown) {
-    let node = event.target;
-    if (whichNodeToMove == "start") {
-      if (!event.target.classList.contains("end")) {
-        node.classList.add("start");
-      }
-      draggedStart = node;
-      start = node;
-      let idx = parseInt(start.getAttribute("data-idx"));
-      startIdx = idx;
-    }
-
-    if (whichNodeToMove == "end") {
-      if (!event.target.classList.contains("start")) {
-        node.classList.add("end");
-      }
-      draggedEnd = node;
-      end = node;
-      let idx = parseInt(end.getAttribute("data-idx"));
-      endIdx = idx;
-    }
-  }
-  whichNodeToMove = "";
-  mouseDown = false;
-});
+}
 
 start_btn.addEventListener("click", () => {
   if (!selected) {
     algoLabel.innerText = "Pick An Algorithm";
     return;
   }
-
   algorithms[whichAlgo](start);
 });
 
 clear_path.addEventListener("click", () => {
+  reset();
+});
+
+function reset() {
+  let visited_nodes = document.querySelectorAll(".visited");
   for (let i = 0; i < boxes.length; i++) {
-    const box = boxes[i];
-    box.classList.remove("visited");
-    box.classList.remove("shortest_path");
-    box.classList.remove("animate");
-    box.removeAttribute("style");
-    visited[i] = null;
+    visited[i] = false;
+    cost[i] = 1;
+    distance[i] = Infinity;
+    prev[i] = null;
+  }
+
+  for (let i = 0; i < visited_nodes.length; i++) {
+    let box = visited_nodes[i];
+    removeStyle(box);
   }
   queue = [];
-  visited = [];
-  start = document.querySelector(".start");
-});
+}
+
+function removeStyle(box) {
+  box.classList.remove("visited");
+  box.classList.remove("shortest_path");
+  box.classList.remove("animate");
+  box.removeAttribute("style");
+}
