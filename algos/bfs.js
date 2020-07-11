@@ -26,11 +26,10 @@ function breadthFirstSearchUtil() {
   }
   if (currentStartBox != start && currentStartBox != end) {
     currentStartBox.classList.add("visited");
+    currentStartBox.classList.add("animate");
+    currentStartBox.style.animationDelay = `${delay}s`;
+    currentStartBox.style.transitionDelay = `${delay}s`;
   }
-  currentStartBox.classList.add("animate");
-  currentStartBox.style.animationDelay = `${delay}s`;
-  currentStartBox.style.transitionDelay = `${delay}s`;
-
   //check if left box exist and if already visied
   if (
     boxes[idx - 1] &&
@@ -75,7 +74,7 @@ function breadthFirstSearchUtil() {
   }
 
   setTimeout(() => {
-    if (!(endIdx == idx)) {
+    if (!(endIdx == idx) && queue.length) {
       breadthFirstSearchUtil();
     }
   }, delay);
