@@ -193,6 +193,7 @@ function moveNodesOnDrag() {
       if (
         !event.target.classList.contains("end") &&
         !event.target.classList.contains("start") &&
+        !event.target.classList.contains("wall") &&
         event.target != currentStart &&
         event.target != wrapper
       ) {
@@ -207,6 +208,7 @@ function moveNodesOnDrag() {
       if (
         !event.target.classList.contains("start") &&
         !event.target.classList.contains("end") &&
+        !event.target.classList.contains("wall") &&
         event.target != currentEnd &&
         event.target != wrapper
       ) {
