@@ -13,15 +13,7 @@ function breadthFirstSearchUtil() {
   let checkForRightMost = (idx + 1) % length == 0,
     checkForLeftMost = idx % length == 0;
   if (endIdx == idx) {
-    for (let i = endIdx; i < prev.length; i = prev[i]) {
-      if (i == startIdx) {
-        return;
-      }
-      if (i != endIdx) {
-        boxes[i].classList.add("shortest_path");
-      }
-      // path.push(i); // path we took get to end node and  reverse it to print
-    }
+    drawShortestPath();
     return;
   }
   if (currentStartBox != start && currentStartBox != end) {

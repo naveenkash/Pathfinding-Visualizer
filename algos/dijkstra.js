@@ -14,15 +14,8 @@ function dijkstraUtil() {
     let checkForRightMost = (idx + 1) % length == 0,
       checkForLeftMost = idx % length == 0;
     if (endIdx == idx) {
-      for (let i = endIdx; i < prev.length; i = prev[i]) {
-        if (i == startIdx) {
-          heap.reset();
-          return;
-        }
-        if (i != endIdx) {
-          boxes[i].classList.add("shortest_path");
-        }
-      }
+      drawShortestPath();
+      heap.reset();
       return;
     }
 

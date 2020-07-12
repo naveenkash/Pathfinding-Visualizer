@@ -27,8 +27,8 @@ let visited = [],
     },
   },
   selected = false,
-  whichAlgo = "";
-// path = [];
+  whichAlgo = "",
+  path = [];
 function createBoxes() {
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length; j++) {
@@ -248,6 +248,7 @@ clear_path.addEventListener("click", () => {
 
 function reset() {
   let visited_nodes = document.querySelectorAll(".visited");
+  let shortest_path = document.querySelectorAll(".shortest_path");
   for (let i = 0; i < boxes.length; i++) {
     visited[i] = false;
     cost[i] = 1;
@@ -259,7 +260,16 @@ function reset() {
     let box = visited_nodes[i];
     removeStyle(box);
   }
+
+  for (let i = 0; i < shortest_path.length; i++) {
+    const box = shortest_path[i];
+    box.innerHTML = "";
+  }
+
+  start.innerHTML = "";
+  end.innerHTML = "";
   queue = [];
+  path = [];
 }
 
 function removeStyle(box) {
@@ -267,4 +277,66 @@ function removeStyle(box) {
   box.classList.remove("shortest_path");
   box.classList.remove("animate");
   box.removeAttribute("style");
+}
+
+function drawShortestPath() {
+  let boxes = document.querySelectorAll(".box");
+  // print path when node found
+  for (let i = endIdx; i < prev.length; i = prev[i]) {
+    if (i == startIdx) {
+      path.push(i);
+      break;
+    }
+    path.push(i); // path we took get to end node and  reverse it to print
+  }
+  path.reverse();
+  // to set arrow for start node
+  // right node
+  if (startIdx == path[1] - 1) {
+    start.innerHTML = '<i class="fas fa-chevron-right"></i>';
+  }
+  // left node
+  if (startIdx == path[1] + 1) {
+    start.innerHTML = '<i class="fas fa-chevron-left"></i>';
+  }
+  // top node
+  if (startIdx - length == path[1]) {
+    start.innerHTML = '<i class="fas fa-chevron-up"></i>';
+  }
+  // bottom node
+  if (startIdx + length == path[1]) {
+    start.innerHTML = '<i class="fas fa-chevron-down"></i>';
+  }
+
+  for (let i = 0; i < path.length; i++) {
+    const idx = path[i];
+
+    //set end node inner html to last node inner html
+    if (path[i + 1] == null) {
+      boxes[path[i]].innerHTML = boxes[path[i - 1]].innerHTML;
+    }
+
+    // right node
+    if (idx == path[i + 1] - 1 && idx != startIdx) {
+      boxes[idx].innerHTML = '<i class="fas fa-chevron-right"></i>';
+      boxes[idx].classList.add("shortest_path");
+    }
+    // left node
+    if (idx == path[i + 1] + 1 && idx != startIdx) {
+      boxes[idx].innerHTML = '<i class="fas fa-chevron-left"></i>';
+      boxes[idx].classList.add("shortest_path");
+    }
+
+    // top node
+    if (idx - length == path[i + 1] && idx != startIdx) {
+      boxes[idx].innerHTML = '<i class="fas fa-chevron-up"></i>';
+      boxes[idx].classList.add("shortest_path");
+    }
+
+    // bottom node
+    if (idx + length == path[i + 1] && idx != startIdx) {
+      boxes[idx].innerHTML = '<i class="fas fa-chevron-down"></i>';
+      boxes[idx].classList.add("shortest_path");
+    }
+  }
 }
