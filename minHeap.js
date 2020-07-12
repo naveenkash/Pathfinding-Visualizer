@@ -29,9 +29,11 @@ function minHeap() {
       return null;
     }
     let min = minheap[0];
-    if (length() >= 1) {
+    if (length() > 1) {
       minheap[0] = minheap.pop();
       heapifyDown(0);
+    } else if (length() == 1) {
+      minheap.pop();
     } else {
       minheap = [];
     }
