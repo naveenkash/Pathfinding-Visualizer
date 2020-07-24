@@ -89,10 +89,8 @@ function dijkstraUtil() {
       }
     }
 
-    setTimeout(() => {
-      if (!(endIdx == idx) && heap.length()) {
-        dijkstraUtil();
-      }
-    }, delay);
+    if (!(endIdx == idx) && heap.length()) {
+      window.requestAnimationFrame(dijkstraUtil);
+    }
   }
 }

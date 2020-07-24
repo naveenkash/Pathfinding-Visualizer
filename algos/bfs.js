@@ -64,10 +64,7 @@ function breadthFirstSearchUtil() {
     visited[idx + length] = true;
     prev[idx + length] = idx;
   }
-
-  setTimeout(() => {
-    if (!(endIdx == idx) && queue.length) {
-      breadthFirstSearchUtil();
-    }
-  }, delay);
+  if (!(endIdx == idx) && queue.length) {
+    window.requestAnimationFrame(breadthFirstSearchUtil);
+  }
 }
