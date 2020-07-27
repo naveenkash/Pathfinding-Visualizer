@@ -19,11 +19,14 @@ let visited = [],
   currentEnd = null,
   whichNodeToMove = null,
   algorithms = {
-    bfs: function (start) {
+    bfs: function () {
       breadthFirstSearch(start);
     },
     djs: function () {
       dijkstra(start);
+    },
+    dfs: function () {
+      depthFirstSearch(start);
     },
   },
   selected = false,
@@ -276,7 +279,7 @@ function removeStyle(box) {
   box.classList.remove("visited");
   box.classList.remove("shortest_path");
   box.classList.remove("animate");
-  box.removeAttribute("style");
+  // box.removeAttribute("style");
 }
 
 function drawShortestPath() {
@@ -287,7 +290,7 @@ function drawShortestPath() {
       path.push(i);
       break;
     }
-    path.push(i); // path we took get to end node and  reverse it to print
+    path.push(i); // path we took get to end node and reverse it to print
   }
   path.reverse();
   // to set arrow for start node
