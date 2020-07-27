@@ -1,13 +1,11 @@
-let stack = [];
-let found = false;
 function depthFirstSearch(box) {
-  stack.push(box);
+  dfsStack.push(box);
   loopDfs();
 }
 
 function loopDfs() {
-  if (stack.length > 0 && !found) {
-    depthFirstSearchUtil(stack.pop());
+  if (dfsStack.length > 0 && !dfsFound) {
+    depthFirstSearchUtil(dfsStack.pop());
     setTimeout(() => {
       loopDfs();
     }, 30);
@@ -17,7 +15,7 @@ function loopDfs() {
 function depthFirstSearchUtil(at) {
   let arr = [];
   let idx = getIndex(at);
-  if (visited[idx] || found) {
+  if (visited[idx] || dfsFound) {
     return;
   }
   visited[idx] = true;
@@ -25,7 +23,7 @@ function depthFirstSearchUtil(at) {
     checkForLeftMost = idx % length == 0;
 
   if (endIdx == idx) {
-    found = true;
+    dfsFound = true;
     drawShortestPath();
     return;
   }
@@ -77,9 +75,9 @@ function depthFirstSearchUtil(at) {
   }
 
   for (let i = arr.length - 1; i >= 0; i--) {
-    if (!found) {
+    if (!dfsFound) {
       const currentStartBox = arr[i];
-      stack.push(currentStartBox);
+      dfsStack.push(currentStartBox);
     }
   }
 }
