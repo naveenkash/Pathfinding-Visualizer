@@ -1,15 +1,12 @@
 function breadthFirstSearch(box) {
-  let indx = box.getAttribute("data-idx"),
-    idx = parseInt(indx);
   //push node that is clicked
-  queue.push(boxes[idx]);
+  queue.push(box);
   breadthFirstSearchUtil();
 }
 
 function breadthFirstSearchUtil() {
   let currentStartBox = queue.shift(),
-    indx = currentStartBox.getAttribute("data-idx"),
-    idx = parseInt(indx); // convert string number to number
+    idx = getIndex(currentStartBox); // convert string number to number
   let checkForRightMost = (idx + 1) % length == 0,
     checkForLeftMost = idx % length == 0;
   if (endIdx == idx) {

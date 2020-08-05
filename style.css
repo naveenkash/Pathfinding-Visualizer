@@ -9,7 +9,7 @@
 
 .container {
   width: 801px;
-  height: 800px;
+  height: auto;
   margin: 20px auto 0 auto;
 }
 .box_wrapper {

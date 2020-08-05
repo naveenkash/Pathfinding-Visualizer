@@ -28,11 +28,16 @@ let visited = [],
     dfs: function () {
       depthFirstSearch(start);
     },
+    astar: function () {
+      aStar(start);
+    },
   },
   selected = false,
   dfsStack = [],
-  dfsFound = false;
-(whichAlgo = ""), (path = []);
+  grid = [],
+  dfsFound = false,
+  whichAlgo = "",
+  path = [];
 function createBoxes() {
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length; j++) {
@@ -41,6 +46,7 @@ function createBoxes() {
       atr.value = "box";
       box.setAttributeNode(atr);
       wrapper.appendChild(box);
+      grid.push({ row: i + 1, col: j + 1 });
     }
   }
 }
@@ -282,7 +288,6 @@ function removeStyle(box) {
   box.classList.remove("visited");
   box.classList.remove("shortest_path");
   box.classList.remove("animate");
-  // box.removeAttribute("style");
 }
 
 function drawShortestPath() {
