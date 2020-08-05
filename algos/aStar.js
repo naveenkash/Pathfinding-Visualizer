@@ -16,6 +16,7 @@ function aStarUtil() {
   if (endIdx == idx) {
     drawShortestPath();
     heap.reset();
+    started = false;
     return;
   }
   if (minNode != start && minNode != end) {
@@ -39,6 +40,8 @@ function aStarUtil() {
 
   if (!(endIdx == idx) && heap.length()) {
     window.requestAnimationFrame(aStarUtil);
+  } else {
+    started = false;
   }
 }
 

@@ -37,7 +37,8 @@ let visited = [],
   grid = [],
   dfsFound = false,
   whichAlgo = "",
-  path = [];
+  path = [],
+  started = false;
 function createBoxes() {
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length; j++) {
@@ -119,22 +120,30 @@ for (let j = 0; j < dropDownItems.length; j++) {
 wrapper.addEventListener("mousedown", function (event) {
   event.preventDefault();
   event.stopPropagation();
-  dragNodes();
+  if (!started) {
+    dragNodes();
+  }
 });
 
 document.addEventListener("mousemove", function (event) {
-  setCurrentBoxIfMouseOutOfContainer();
+  if (!started) {
+    setCurrentBoxIfMouseOutOfContainer();
+  }
 });
 
 wrapper.addEventListener("mouseover", function (event) {
   event.preventDefault();
-  moveNodesOnDrag();
+  if (!started) {
+    moveNodesOnDrag();
+  }
 });
 
 wrapper.addEventListener("mouseup", function (event) {
   event.preventDefault();
   event.stopPropagation();
-  setNodeWhenMouseLifted();
+  if (!started) {
+    setNodeWhenMouseLifted();
+  }
 });
 
 function setCurrentBoxIfMouseOutOfContainer() {
@@ -249,11 +258,16 @@ start_btn.addEventListener("click", () => {
     algoLabel.innerText = "Pick An Algorithm";
     return;
   }
+  if (started) return;
+  reset();
   algorithms[whichAlgo](start);
+  started = true;
 });
 
 clear_path.addEventListener("click", () => {
-  reset();
+  if (!started) {
+    reset();
+  }
 });
 
 function reset() {
@@ -282,6 +296,7 @@ function reset() {
   path = [];
   dfsStack = [];
   dfsFound = false;
+  started = false;
 }
 
 function removeStyle(box) {
@@ -291,7 +306,6 @@ function removeStyle(box) {
 }
 
 function drawShortestPath() {
-  let boxes = document.querySelectorAll(".box");
   // print path when node found
   for (let i = endIdx; i < prev.length; i = prev[i]) {
     if (i == startIdx) {
@@ -319,6 +333,7 @@ function drawShortestPath() {
     start.innerHTML = '<i class="fas fa-chevron-down"></i>';
   }
   loopPath();
+  started = false;
 }
 
 function loopPath() {

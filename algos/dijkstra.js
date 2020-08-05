@@ -16,6 +16,7 @@ function dijkstraUtil() {
     if (endIdx == idx) {
       drawShortestPath();
       heap.reset();
+      started = false;
       return;
     }
 
@@ -91,6 +92,8 @@ function dijkstraUtil() {
 
     if (!(endIdx == idx) && heap.length()) {
       window.requestAnimationFrame(dijkstraUtil);
+    } else {
+      started = false;
     }
   }
 }

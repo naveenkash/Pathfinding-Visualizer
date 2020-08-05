@@ -25,6 +25,7 @@ function depthFirstSearchUtil(at) {
   if (endIdx == idx) {
     dfsFound = true;
     drawShortestPath();
+    started = false;
     return;
   }
 
@@ -78,6 +79,8 @@ function depthFirstSearchUtil(at) {
     if (!dfsFound) {
       const currentStartBox = arr[i];
       dfsStack.push(currentStartBox);
+    } else {
+      started = false;
     }
   }
 }

@@ -11,6 +11,7 @@ function breadthFirstSearchUtil() {
     checkForLeftMost = idx % length == 0;
   if (endIdx == idx) {
     drawShortestPath();
+    started = false;
     return;
   }
   if (currentStartBox != start && currentStartBox != end) {
@@ -63,5 +64,7 @@ function breadthFirstSearchUtil() {
   }
   if (!(endIdx == idx) && queue.length) {
     window.requestAnimationFrame(breadthFirstSearchUtil);
+  } else {
+    started = false;
   }
 }
