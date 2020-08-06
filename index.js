@@ -1,13 +1,8 @@
-let visited = [],
-  queue = [],
-  distance = [],
-  cost = [],
-  length = 40,
+let length = 40,
   start_btn = document.querySelector(".start_btn"),
   clear_path = document.querySelector(".clear"),
   wrapper = document.querySelector(".box_wrapper"),
   delay = 0.01,
-  prev = [],
   algoSelect = document.querySelector(".algo-info"),
   dropDownUl = document.querySelector(".dropdown ul"),
   dropDown = document.querySelector(".dropdown"),
@@ -20,23 +15,30 @@ let visited = [],
   whichNodeToMove = null,
   algorithms = {
     bfs: function () {
-      breadthFirstSearch(start);
+      const breadth = new BreadthFirstSearch();
+      breadth.start(start);
+      currentAlgo["algo"] = breadth;
     },
     djs: function () {
-      dijkstra(start);
+      const dijk = new Dijkstra();
+      dijk.start(start);
+      currentAlgo["algo"] = dijk;
     },
     dfs: function () {
-      depthFirstSearch(start);
+      const depth = new DepthFirstSearch();
+      depth.start(start);
+      currentAlgo["algo"] = depth;
     },
     astar: function () {
-      aStar(start);
+      const as = new AStar();
+      as.start(start);
+      currentAlgo["algo"] = as;
     },
   },
   selected = false,
-  dfsStack = [],
   grid = [],
-  dfsFound = false,
   whichAlgo = "",
+  currentAlgo = {},
   path = [],
   started = false;
 function createBoxes() {
@@ -73,11 +75,6 @@ for (let i = 0; i < boxes.length; i++) {
     box.classList.add("end");
     end = box;
   }
-
-  visited[i] = false;
-  distance[i] = Infinity;
-  cost[i] = 1;
-  prev[i] = null;
 }
 
 function getIndex(node) {
@@ -259,43 +256,32 @@ start_btn.addEventListener("click", () => {
     return;
   }
   if (started) return;
-  reset();
+  if (currentAlgo.algo) reset();
   algorithms[whichAlgo](start);
   started = true;
 });
 
 clear_path.addEventListener("click", () => {
   if (!started) {
-    reset();
+    if (currentAlgo.algo) reset();
   }
 });
 
 function reset() {
   let visited_nodes = document.querySelectorAll(".visited");
   let shortest_path = document.querySelectorAll(".shortest_path");
-  for (let i = 0; i < boxes.length; i++) {
-    visited[i] = false;
-    cost[i] = 1;
-    distance[i] = Infinity;
-    prev[i] = null;
-  }
-
   for (let i = 0; i < visited_nodes.length; i++) {
     let box = visited_nodes[i];
     removeStyle(box);
   }
-
   for (let i = 0; i < shortest_path.length; i++) {
     const box = shortest_path[i];
     box.innerHTML = "";
   }
-
+  currentAlgo.algo.default();
   start.innerHTML = "";
   end.innerHTML = "";
-  queue = [];
   path = [];
-  dfsStack = [];
-  dfsFound = false;
   started = false;
 }
 
@@ -305,7 +291,7 @@ function removeStyle(box) {
   box.classList.remove("animate");
 }
 
-function drawShortestPath() {
+function drawShortestPath(prev) {
   // print path when node found
   for (let i = endIdx; i < prev.length; i = prev[i]) {
     if (i == startIdx) {

@@ -21,7 +21,7 @@ class MinHeap {
       }
     }
   }
-  extractMin = () => {
+  extractMin() {
     if (this.length() == 0) {
       return null;
     }
@@ -33,9 +33,9 @@ class MinHeap {
       this.list = [];
     }
     return min;
-  };
+  }
 
-  heapifyDown = (index) => {
+  heapifyDown(index) {
     let left = 2 * index + 1,
       right = 2 * index + 2,
       length = this.length(),
@@ -54,7 +54,7 @@ class MinHeap {
       this.list[index] = temp;
       this.heapifyDown(smallest);
     }
-  };
+  }
   length() {
     return this.list.length;
   }
