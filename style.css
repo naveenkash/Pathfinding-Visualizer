@@ -45,9 +45,10 @@
 }
 .bottom_menu {
   display: flex;
-  width: 800px;
+  width: auto;
   height: auto;
   align-items: center;
+  flex-wrap: wrap;
 }
 .node_info {
   display: flex;
@@ -66,7 +67,7 @@
   border: 1px solid #87aeff;
   margin-right: 10px;
 }
-.visited_box {
+.empty_box {
   width: 20px;
   height: 20px;
   margin-right: 10px;
@@ -79,6 +80,12 @@
 }
 .short_box {
   background-color: #ffff00;
+}
+.end_box {
+  background-color: #ff0000;
+}
+.start_box {
+  background-color: #008000;
 }
 .dropdown {
   width: 250px;
