@@ -12,8 +12,8 @@
   </head>
   <body>
     <div class="container">
-      <div class="menu">
-        <div class="start_btn">Start</div>
+      <div class="top_menu">
+        <div class="btn start_btn">Start</div>
         <div class="dropdown">
           <div class="algo-info">
             <label>Algorithms</label>
@@ -26,7 +26,27 @@
             <li id="astar">A* Algorithm</li>
           </ul>
         </div>
-        <div class="start_btn clear">Clear Path</div>
+        <div class="btn clear">Clear Path</div>
+        <div class="btn clear_board">Clear Board</div>
+      </div>
+      <div class="bottom_menu">
+        <div class="node_info">
+          <div class="unvisited_box"></div>
+          Unvisited Node
+        </div>
+        <div class="node_info">
+          <div class="visited_box visited"></div>
+          <div class="visited_box2"></div>
+          Visited Nodes
+        </div>
+        <div class="node_info">
+          <div class="short_box visited_box"></div>
+          Shortest-path Node
+        </div>
+        <div class="node_info">
+          <div class="wall visited_box"></div>
+          Wall Node
+        </div>
       </div>
       <div class="box_wrapper"></div>
     </div>

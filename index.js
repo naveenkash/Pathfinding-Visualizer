@@ -1,6 +1,7 @@
 let length = 40,
   start_btn = document.querySelector(".start_btn"),
   clear_path = document.querySelector(".clear"),
+  clear_board = document.querySelector(".clear_board"),
   wrapper = document.querySelector(".box_wrapper"),
   delay = 0.01,
   algoSelect = document.querySelector(".algo-info"),
@@ -266,10 +267,19 @@ clear_path.addEventListener("click", () => {
     if (currentAlgo.algo) reset();
   }
 });
-
+clear_board.addEventListener("click", () => {
+  if (!started) {
+    if (currentAlgo.algo) reset();
+    let walls = document.querySelectorAll(".box_wrapper .wall");
+    for (let i = 0; i < walls.length; i++) {
+      const wall = walls[i];
+      wall.classList.remove("wall");
+    }
+  }
+});
 function reset() {
-  let visited_nodes = document.querySelectorAll(".visited");
-  let shortest_path = document.querySelectorAll(".shortest_path");
+  let visited_nodes = document.querySelectorAll(".box_wrapper .visited");
+  let shortest_path = document.querySelectorAll(".box_wrapper .shortest_path");
   for (let i = 0; i < visited_nodes.length; i++) {
     let box = visited_nodes[i];
     removeStyle(box);
