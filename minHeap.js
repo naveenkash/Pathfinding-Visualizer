@@ -1,83 +1,64 @@
-function minHeap() {
-  var minheap = [];
-  var newObj = {
-    minheap: minheap,
-  };
-
-  function insert(value) {
-    minheap.push(value);
-    heapifyUp();
+class MinHeap {
+  constructor() {
+    this.list = [];
   }
-
-  function heapifyUp() {
-    let index = minheap.length - 1;
-    while (index >= 0) {
-      let element = minheap[index],
-        idx = getIndex(element),
-        parentIndex = Math.floor(index / 2),
-        parent = minheap[parentIndex],
-        parentIdx = getIndex(parent);
-      if (cost[parentIdx] <= cost[idx]) return;
-      minheap[index] = parent;
-      minheap[parentIndex] = element;
-      index = parentIndex;
+  insert(idx, priority) {
+    this.list.push({ idx, value: priority });
+    this.heapifyUp();
+  }
+  heapifyUp() {
+    let index = this.length() - 1;
+    while (index >= 1) {
+      let element = this.list[index],
+        parentIndex = Math.floor((index - 1) / 2),
+        parent = this.list[parentIndex];
+      if (this.list[parentIndex].value > this.list[index].value) {
+        this.list[index] = parent;
+        this.list[parentIndex] = element;
+        index = parentIndex;
+      } else {
+        return;
+      }
     }
   }
-
-  function extractMin() {
-    if (length() == 0) {
+  extractMin = () => {
+    if (this.length() == 0) {
       return null;
     }
-    let min = minheap[0];
-    if (length() > 1) {
-      minheap[0] = minheap.pop();
-      heapifyDown(0);
-    } else if (length() == 1) {
-      minheap.pop();
+    let min = this.list[0];
+    if (this.length() > 1) {
+      this.list[0] = this.list.pop();
+      this.heapifyDown(0);
     } else {
-      minheap = [];
+      this.list = [];
     }
     return min;
-  }
+  };
 
-  function heapifyDown(index) {
+  heapifyDown = (index) => {
     let left = 2 * index + 1,
       right = 2 * index + 2,
-      length = minheap.length,
+      length = this.length(),
       smallest = index;
 
-    if (
-      left < length &&
-      cost[getIndex(minheap[left])] < cost[getIndex(minheap[smallest])]
-    ) {
+    if (left < length && this.list[left].value < this.list[smallest].value) {
       smallest = left;
     }
-    if (
-      right < length &&
-      cost[getIndex(minheap[right])] < cost[getIndex(minheap[smallest])]
-    ) {
+    if (right < length && this.list[right].value < this.list[smallest].value) {
       smallest = right;
     }
 
     if (smallest !== index) {
-      let temp = minheap[smallest];
-      minheap[smallest] = minheap[index];
-      minheap[index] = temp;
-      heapifyDown(smallest);
+      let temp = this.list[smallest];
+      this.list[smallest] = this.list[index];
+      this.list[index] = temp;
+      this.heapifyDown(smallest);
     }
+  };
+  length() {
+    return this.list.length;
   }
-
-  function length() {
-    return minheap.length;
+  reset() {
+    this.list = [];
   }
-
-  function reset() {
-    minheap = [];
-  }
-  newObj.length = length;
-  newObj.insert = insert;
-  newObj.extractMin = extractMin;
-  newObj.reset = reset;
-
-  return newObj;
 }

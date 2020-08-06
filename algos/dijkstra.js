@@ -1,15 +1,16 @@
-var heap = minHeap();
+var heap = new MinHeap();
 function dijkstra(start) {
-  heap.insert(start);
   let startIdx = getIndex(start);
+  heap.insert(startIdx, 0);
   visited[startIdx] = true;
   distance[startIdx] = 1;
   dijkstraUtil();
 }
 
 function dijkstraUtil() {
-  let minNode = heap.extractMin();
-  let idx = getIndex(minNode);
+  let poppedNode = heap.extractMin();
+  let minNode = boxes[poppedNode.idx];
+  let idx = poppedNode.idx;
   if (distance[idx] >= cost[idx]) {
     let checkForRightMost = (idx + 1) % length == 0,
       checkForLeftMost = idx % length == 0;
@@ -40,7 +41,7 @@ function dijkstraUtil() {
         cost[idx - 1] = newDistance;
         visited[idx - 1] = true;
         prev[idx - 1] = idx;
-        heap.insert(boxes[idx - 1]);
+        heap.insert(idx - 1, newDistance);
       }
     }
     //check if right box exist and if already visited
@@ -56,7 +57,7 @@ function dijkstraUtil() {
         distance[idx + 1] = newDistance;
         visited[idx + 1] = true;
         prev[idx + 1] = idx;
-        heap.insert(boxes[idx + 1]);
+        heap.insert(idx + 1, newDistance);
       }
     }
     //check if top box exist and if already visited
@@ -71,7 +72,7 @@ function dijkstraUtil() {
         distance[idx - length] = newDistance;
         visited[idx - length] = true;
         prev[idx - length] = idx;
-        heap.insert(boxes[idx - length]);
+        heap.insert(idx - length, newDistance);
       }
     }
     //check if bottom box exist and if already visited
@@ -86,7 +87,7 @@ function dijkstraUtil() {
         distance[idx + length] = newDistance;
         visited[idx + length] = true;
         prev[idx + length] = idx;
-        heap.insert(boxes[idx + length]);
+        heap.insert(idx + length, newDistance);
       }
     }
 

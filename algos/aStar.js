@@ -1,14 +1,15 @@
-var heap = minHeap();
+var heap = new MinHeap();
 function aStar(box) {
-  heap.insert(box);
   let startIdx = getIndex(box);
+  heap.insert(startIdx, 0);
   visited[startIdx] = true;
   distance[startIdx] = 1;
   aStarUtil();
 }
 
 function aStarUtil() {
-  let minNode = heap.extractMin();
+  let poppedMinNode = heap.extractMin();
+  let minNode = boxes[poppedMinNode.idx];
   let idx = getIndex(minNode);
   let checkForRightMost = (idx + 1) % length == 0,
     checkForLeftMost = idx % length == 0;
@@ -52,11 +53,11 @@ function processNode(prevIdx, idx, parentDistance) {
       Math.abs(grid[idx].col - grid[endIdx].col);
     let newDistance = 1 + parentDistance + heuristic;
     if (newDistance < distance[idx] + heuristic) {
-      distance[idx] = newDistance;
+      distance[idx] = newDistance - heuristic;
       cost[idx] = heuristic; // cost should not be changed it is 1 always
       visited[idx] = true;
       prev[idx] = prevIdx;
-      heap.insert(boxes[idx]);
+      heap.insert(idx, heuristic);
     }
   }
 }
