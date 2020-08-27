@@ -76,21 +76,33 @@
   width: 20px;
   height: 20px;
   margin-right: 10px;
+  background-color: #cb6bff;
+}
+.visited_box1 {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
   background-color: #f170ff;
 }
 .short_box {
   background-color: #ffff00;
 }
 .end_box {
-  background-color: #ff0000;
+  background-image: url("./assets/aim.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 .start_box {
-  background-color: #008000;
+  background-image: url("./assets/right.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 .dropdown {
   width: 250px;
   height: 40px;
-  background: #15202b;
+  background-color: #15202b;
   margin-right: 20px;
   border-radius: 6px;
   position: relative;
@@ -102,7 +114,7 @@
 .algo-info {
   width: 100%;
   height: 100%;
-  background: #15202b;
+  background-color: #15202b;
   cursor: pointer;
   border-radius: 6px;
   z-index: 10;
@@ -139,7 +151,7 @@
   list-style-type: none;
   width: 100%;
   height: auto;
-  background: #15202b;
+  background-color: #15202b;
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
   padding: 8px 4px;
@@ -161,7 +173,7 @@
   border-radius: 40px;
 }
 .dropdown ul li:hover {
-  background: #87adff44;
+  background-color: #87adff44;
   color: #87aeff;
 }
 .btn {
@@ -173,7 +185,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #15202b;
+  background-color: #15202b;
   cursor: pointer;
   border-radius: 6px;
   letter-spacing: 1.5px;
@@ -191,58 +203,91 @@
   animation: scale-bkg 0.3s ease-in 0.3s;
 }
 .start {
-  background: #008000 !important;
+  background-image: url("./assets/right.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   cursor: grab;
   transition: 0.3s;
-  border-color: #008000 !important;
 }
+
 .end {
-  background: #ff0000 !important;
-  border-color: #ff0000 !important;
+  background-image: url("./assets/aim.svg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
   cursor: grab;
   transition: 0.3s;
 }
 
 .visited {
-  background: #cb6bff;
+  background-color: #cb6bff;
+  animation: scale-bkg 1s ease-out;
 }
 
 .wall {
-  background: #15202b !important;
+  background-color: #15202b !important;
   border-color: #15202b !important;
+  animation-name: wallAnimation;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
+  z-index: 1;
 }
 
 .shortest_path {
-  background: #ffff00;
+  background-color: #ffff00;
   border-color: #ffff00;
   color: #15202b;
-  animation: short-bkg 0.3s ease-in 0.3s;
+  animation: short-bkg 1s ease-in 1s;
 }
 
 @keyframes short-bkg {
   0% {
-    transform: scale(1);
-    background: #c4c702;
+    transform: scale(0.8);
+    background-color: #ffff00;
   }
   50% {
-    transform: scale(1.3);
-    background: #c4c702;
+    transform: scale(1.2);
   }
   100% {
     transform: scale(1);
+  }
+}
+
+@keyframes wallAnimation {
+  0% {
+    transform: scale(1);
+    background-color: #15202b;
+  }
+  50% {
+    transform: scale(1.2);
+    background-color: #15202b;
+  }
+  100% {
+    transform: scale(1);
+    background-color: #15202b;
   }
 }
 
 @keyframes scale-bkg {
   0% {
-    transform: scale(1);
-    background: #f170ff;
+    transform: scale(0.3);
+    background-color: #ec40ff;
+    border-radius: 100%;
   }
   50% {
-    transform: scale(1.3);
-    background: #f170ff;
+    background-color: #ea2aff;
+  }
+  75% {
+    transform: scale(1.2);
+    background-color: #cd33df;
   }
   100% {
     transform: scale(1);
+    background-color: #cb6bff;
   }
 }
