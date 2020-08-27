@@ -4,11 +4,16 @@ let length = 40,
   clear_board = document.querySelector(".clear_board"),
   wrapper = document.querySelector(".box_wrapper"),
   delay = 0.01,
-  algoSelect = document.querySelector(".algo-info"),
-  dropDownUl = document.querySelector(".dropdown ul"),
-  dropDown = document.querySelector(".dropdown"),
-  algoLabel = document.querySelector(".algo-info label"),
-  dropDownItems = document.querySelectorAll(".dropdown ul li"),
+  algoSelect = document.querySelector(".agi-info"),
+  mazeSelect = document.querySelector(".maze-info"),
+  dropDownUl = document.querySelector(".dropdown-algo ul"),
+  dropDown = document.querySelector(".dropdown-algo"),
+  mazeUl = document.querySelector(".dropdown-maze ul"),
+  maze = document.querySelector(".dropdown-maze"),
+  algoLabel = document.querySelector(".agi-info label"),
+  mazeLabel = document.querySelector(".maze-info label"),
+  dropDownItemsAlgo = document.querySelectorAll(".dropdown-algo ul li"),
+  dropDownItemsMaze = document.querySelectorAll(".dropdown-maze ul li"),
   draggedStart = null,
   currentStart = null,
   draggedEnd = null,
@@ -83,11 +88,19 @@ function getIndex(node) {
 }
 
 let openDropDown = false;
+let openMaze = false;
+
 document.addEventListener("click", function (event) {
   if (!dropDown.contains(event.target) && openDropDown) {
     openDropDown = !openDropDown;
     dropDownUl.style.display = "none";
     document.querySelector(".algo-info span").innerHTML =
+      '<i class="fas fa-chevron-down"></i>';
+  }
+  if (!maze.contains(event.target) && openMaze) {
+    openMaze = !openMaze;
+    mazeUl.style.display = "none";
+    document.querySelector(".maze-info span").innerHTML =
       '<i class="fas fa-chevron-down"></i>';
   }
 });
@@ -97,22 +110,59 @@ algoSelect.addEventListener("click", function (e) {
   openDropDown = !openDropDown;
   if (openDropDown) {
     dropDownUl.style.display = "block";
-    document.querySelector(".algo-info span").innerHTML =
+    document.querySelector(".agi-info span").innerHTML =
       '<i class="fas fa-chevron-up"></i>';
   } else {
     dropDownUl.style.display = "none";
-    document.querySelector(".algo-info span").innerHTML =
+    document.querySelector(".agi-info span").innerHTML =
       '<i class="fas fa-chevron-down"></i>';
   }
 });
 
-for (let j = 0; j < dropDownItems.length; j++) {
-  const dropDownItem = dropDownItems[j];
+mazeSelect.addEventListener("click", function (e) {
+  openMaze = !openMaze;
+  if (openMaze) {
+    mazeUl.style.display = "block";
+    document.querySelector(".maze-info span").innerHTML =
+      '<i class="fas fa-chevron-up"></i>';
+  } else {
+    mazeUl.style.display = "none";
+    document.querySelector(".maze-info span").innerHTML =
+      '<i class="fas fa-chevron-down"></i>';
+  }
+});
+
+for (let j = 0; j < dropDownItemsAlgo.length; j++) {
+  const dropDownItem = dropDownItemsAlgo[j];
   dropDownItem.addEventListener("click", function () {
     algoLabel.innerText = dropDownItem.innerText;
     selected = true;
     whichAlgo = dropDownItem.id;
   });
+}
+
+for (let j = 0; j < dropDownItemsMaze.length; j++) {
+  const dropDownItem = dropDownItemsMaze[j];
+  dropDownItem.addEventListener("click", function () {
+    mazeLabel.innerText = dropDownItem.innerText;
+    if (!started) {
+      if (dropDownItem.id == "randome-maze") {
+        reset();
+        clearBoard();
+        let rdm = createRandomNumber(100, boxes.length / 2);
+        for (let i = 0; i < rdm; i++) {
+          let rdmIdx = createRandomNumber(0, boxes.length - 1);
+          if (boxes[rdmIdx] !== start && boxes[rdmIdx] !== end) {
+            boxes[rdmIdx].classList.add("wall");
+          }
+        }
+      }
+    }
+  });
+}
+
+function createRandomNumber(min, max) {
+  return Math.floor(Math.floor(Math.random() * max) + min);
 }
 
 wrapper.addEventListener("mousedown", function (event) {
@@ -278,6 +328,9 @@ clear_path.addEventListener("click", () => {
   }
 });
 clear_board.addEventListener("click", () => {
+  clearBoard();
+});
+function clearBoard() {
   if (!started) {
     if (currentAlgo.algo) reset();
     let walls = document.querySelectorAll(".box_wrapper .wall");
@@ -286,7 +339,7 @@ clear_board.addEventListener("click", () => {
       wall.classList.remove("wall");
     }
   }
-});
+}
 function reset() {
   let visited_nodes = document.querySelectorAll(".box_wrapper .visited");
   let shortest_path = document.querySelectorAll(".box_wrapper .shortest_path");
@@ -298,7 +351,9 @@ function reset() {
     const box = shortest_path[i];
     removeStyle(box);
   }
-  currentAlgo.algo.default();
+  if (currentAlgo.algo) {
+    currentAlgo.algo.default();
+  }
   path = [];
   end.style.backgroundImage = "url(./assets/aim.svg)";
   started = false;
