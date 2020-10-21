@@ -284,6 +284,9 @@ function moveNodesOnDrag() {
         }
         event.target.classList.add("start");
         currentStart = event.target; // the current element we are on
+        start = currentStart;
+        let idx = parseInt(start.getAttribute("data-idx"));
+        startIdx = idx;
         if (draggedStart !== currentStart) {
           draggedStart.classList.remove("start");
         }
@@ -301,6 +304,9 @@ function moveNodesOnDrag() {
         }
         event.target.classList.add("end");
         currentEnd = event.target; // the current element we are on
+        end = currentEnd;
+        let idx = parseInt(end.getAttribute("data-idx"));
+        endIdx = idx;
         if (draggedEnd !== currentEnd) {
           draggedEnd.classList.remove("end");
         }
