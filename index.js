@@ -241,23 +241,28 @@ function setNodeWhenMouseLifted() {
   if (mouseDown) {
     let node = event.target;
     if (whichNodeToMove == "start") {
-      if (!event.target.classList.contains("end")) {
+      if (
+        !event.target.classList.contains("end") &&
+        !event.target.classList.contains("wall")
+      ) {
         node.classList.add("start");
+        draggedStart = node;
+        start = node;
+        let idx = parseInt(start.getAttribute("data-idx"));
+        startIdx = idx;
       }
-      draggedStart = node;
-      start = node;
-      let idx = parseInt(start.getAttribute("data-idx"));
-      startIdx = idx;
     }
-
     if (whichNodeToMove == "end") {
-      if (!event.target.classList.contains("start")) {
+      if (
+        !event.target.classList.contains("start") &&
+        !event.target.classList.contains("wall")
+      ) {
         node.classList.add("end");
+        draggedEnd = node;
+        end = node;
+        let idx = parseInt(end.getAttribute("data-idx"));
+        endIdx = idx;
       }
-      draggedEnd = node;
-      end = node;
-      let idx = parseInt(end.getAttribute("data-idx"));
-      endIdx = idx;
     }
   }
   whichNodeToMove = "";
@@ -279,7 +284,9 @@ function moveNodesOnDrag() {
         }
         event.target.classList.add("start");
         currentStart = event.target; // the current element we are on
-        draggedStart.classList.remove("start");
+        if (draggedStart !== currentStart) {
+          draggedStart.classList.remove("start");
+        }
       }
     } else if (whichNodeToMove == "end") {
       if (
@@ -294,7 +301,9 @@ function moveNodesOnDrag() {
         }
         event.target.classList.add("end");
         currentEnd = event.target; // the current element we are on
-        draggedEnd.classList.remove("end");
+        if (draggedEnd !== currentEnd) {
+          draggedEnd.classList.remove("end");
+        }
       }
     } else {
       if (
@@ -355,7 +364,6 @@ function reset() {
     currentAlgo.algo.default();
   }
   path = [];
-  end.style.backgroundImage = "url(./assets/aim.svg)";
   started = false;
 }
 
