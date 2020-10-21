@@ -169,13 +169,14 @@ wrapper.addEventListener("mousedown", function (event) {
   event.preventDefault();
   event.stopPropagation();
   if (!started) {
-    dragNodes();
-    if (
-      !event.target.classList.contains("start") &&
+    const BOX_VALID =
       !event.target.classList.contains("end") &&
-      !event.target.classList.contains("wall") &&
-      !event.target.contains(wrapper)
-    ) {
+      !event.target.classList.contains("start") &&
+      !event.target.classList.contains("wall");
+    const BOX_VALID_TO_CREATE_WALL =
+      BOX_VALID && !event.target.contains(wrapper);
+    dragNodes();
+    if (BOX_VALID_TO_CREATE_WALL) {
       event.target.classList.add("wall");
     } else if (event.target.classList.contains("wall")) {
       event.target.classList.remove("wall");
@@ -212,13 +213,13 @@ function setCurrentBoxIfMouseOutOfContainer() {
       let startNode = document.querySelector(".start");
       draggedStart = startNode;
       start = startNode;
-      let idx = parseInt(startNode.getAttribute("data-idx"));
+      let idx = getIndex(startNode);
       startIdx = idx;
     } else if (whichNodeToMove == "end") {
       let endNode = document.querySelector(".end");
       draggedEnd = endNode;
       end = endNode;
-      let idx2 = parseInt(endNode.getAttribute("data-idx"));
+      let idx2 = getIndex(endNode);
       endIdx = idx2;
     }
     whichNodeToMove = "";
@@ -238,29 +239,29 @@ function dragNodes() {
 }
 
 function setNodeWhenMouseLifted() {
+  const BOX_VALID_FOR_START_NODE =
+      !event.target.classList.contains("end") &&
+      !event.target.classList.contains("wall"),
+    BOX_VALID_FOR_END_NODE =
+      !event.target.classList.contains("end") &&
+      !event.target.classList.contains("wall");
   if (mouseDown) {
     let node = event.target;
     if (whichNodeToMove == "start") {
-      if (
-        !event.target.classList.contains("end") &&
-        !event.target.classList.contains("wall")
-      ) {
+      if (BOX_VALID_FOR_START_NODE) {
         node.classList.add("start");
         draggedStart = node;
         start = node;
-        let idx = parseInt(start.getAttribute("data-idx"));
+        let idx = getIndex(start);
         startIdx = idx;
       }
     }
     if (whichNodeToMove == "end") {
-      if (
-        !event.target.classList.contains("start") &&
-        !event.target.classList.contains("wall")
-      ) {
+      if (BOX_VALID_FOR_END_NODE) {
         node.classList.add("end");
         draggedEnd = node;
         end = node;
-        let idx = parseInt(end.getAttribute("data-idx"));
+        let idx = getIndex(end);
         endIdx = idx;
       }
     }
@@ -270,54 +271,46 @@ function setNodeWhenMouseLifted() {
 }
 
 function moveNodesOnDrag() {
+  const BOX_VALID =
+    !event.target.classList.contains("end") &&
+    !event.target.classList.contains("start") &&
+    !event.target.classList.contains("wall");
+  const BOX_VALID_FOR_START_NODE =
+      BOX_VALID && event.target != currentStart && event.target != wrapper,
+    BOX_VALID_FOR_END_NODE =
+      BOX_VALID && event.target != currentEnd && event.target != wrapper,
+    BOX_VALID_TO_CREATE_WALL = BOX_VALID && !event.target.contains(wrapper);
   if (mouseDown) {
     if (whichNodeToMove == "start") {
-      if (
-        !event.target.classList.contains("end") &&
-        !event.target.classList.contains("start") &&
-        !event.target.classList.contains("wall") &&
-        event.target != currentStart &&
-        event.target != wrapper
-      ) {
+      if (BOX_VALID_FOR_START_NODE) {
         if (currentStart) {
           currentStart.classList.remove("start");
         }
         event.target.classList.add("start");
         currentStart = event.target; // the current element we are on
         start = currentStart;
-        let idx = parseInt(start.getAttribute("data-idx"));
+        let idx = getIndex(start);
         startIdx = idx;
         if (draggedStart !== currentStart) {
           draggedStart.classList.remove("start");
         }
       }
     } else if (whichNodeToMove == "end") {
-      if (
-        !event.target.classList.contains("start") &&
-        !event.target.classList.contains("end") &&
-        !event.target.classList.contains("wall") &&
-        event.target != currentEnd &&
-        event.target != wrapper
-      ) {
+      if (BOX_VALID_FOR_END_NODE) {
         if (currentEnd) {
           currentEnd.classList.remove("end");
         }
         event.target.classList.add("end");
         currentEnd = event.target; // the current element we are on
         end = currentEnd;
-        let idx = parseInt(end.getAttribute("data-idx"));
+        let idx = getIndex(end);
         endIdx = idx;
         if (draggedEnd !== currentEnd) {
           draggedEnd.classList.remove("end");
         }
       }
     } else {
-      if (
-        !event.target.classList.contains("start") &&
-        !event.target.classList.contains("end") &&
-        !event.target.classList.contains("wall") &&
-        !event.target.contains(wrapper)
-      ) {
+      if (BOX_VALID_TO_CREATE_WALL) {
         event.target.classList.add("wall");
       } else if (event.target.classList.contains("wall")) {
         event.target.classList.remove("wall");
