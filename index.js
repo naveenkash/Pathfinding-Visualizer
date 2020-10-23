@@ -157,6 +157,12 @@ for (let j = 0; j < dropDownItemsMaze.length; j++) {
           }
         }
       }
+      if (dropDownItem.id == "zig-zag-maze") {
+        reset();
+        clearBoard();
+        const ZigZag = new ZigZagMaze();
+        ZigZag.start();
+      }
     }
   });
 }
