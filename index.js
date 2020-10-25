@@ -156,12 +156,16 @@ for (let j = 0; j < dropDownItemsMaze.length; j++) {
             boxes[rdmIdx].classList.add("wall");
           }
         }
-      }
-      if (dropDownItem.id == "zig-zag-maze") {
+      } else if (dropDownItem.id == "zig-zag-maze") {
         reset();
         clearBoard();
         const ZigZag = new ZigZagMaze();
         ZigZag.start();
+      } else if (dropDownItem.id == "recursive-maze") {
+        reset();
+        clearBoard();
+        const Recursive = new RecursiveMaze();
+        Recursive.start(start);
       }
     }
   });
