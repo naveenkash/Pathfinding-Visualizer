@@ -161,11 +161,11 @@ for (let j = 0; j < dropDownItemsMaze.length; j++) {
         clearBoard();
         const ZigZag = new ZigZagMaze();
         ZigZag.start();
-      } else if (dropDownItem.id == "recursive-maze") {
+      } else if (dropDownItem.id == "recursive-backtracker") {
         reset();
         clearBoard();
-        const Recursive = new RecursiveMaze();
-        Recursive.start(start);
+        const RecursiveBkt = new RecursiveBacktracker();
+        RecursiveBkt.start(start);
       }
     }
   });
