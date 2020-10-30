@@ -10,28 +10,36 @@ class RecursiveBacktracker {
     started = false;
   }
   async createMaze(node) {
-    let idx = getIndex(node);
-    let ranDir = this.generateRandomDirections();
+    const idx = getIndex(node),
+      ranDir = this.generateRandomDirections();
 
     for (let i = 0; i < ranDir.length; i++) {
-      let left = idx - 2,
-        bottom = idx + length * 2,
-        top = idx - length * 2,
-        right = idx + 2,
+      const twoNodeLeft = idx - 2,
+        twoNodeBottom = idx + length * 2,
+        twoNodeTop = idx - length * 2,
+        twoNodeRight = idx + 2,
         checkForRightMost = grid[idx].col + 2 > length,
         checkForLeftMost = grid[idx].col - 2 < 1,
         checkForLastRow = grid[idx].row + 2 > length,
         checkTopRow = grid[idx].row - 2 < 1;
 
-      const dir = ranDir[i];
+      const dir = ranDir[i],
+        oneNodeTop = twoNodeTop + length,
+        oneNodeRight = twoNodeRight - 1,
+        oneNodeBottom = twoNodeBottom - length,
+        oneNodeLeft = twoNodeLeft + 1;
 
       // Up
       if (dir == 1) {
         if (!checkTopRow) {
-          if (this.isBoxValid(top)) {
-            this.boxes[top].classList.add("wall");
-            this.boxes[top + length].classList.add("wall");
-            await this.delayRecursiveCall(this.createMaze(this.boxes[top]));
+          if (this.isBoxValid(twoNodeTop)) {
+            this.boxes[twoNodeTop].classList.add("wall");
+            this.isBoxValid([oneNodeTop])
+              ? this.boxes[oneNodeTop].classList.add("wall")
+              : "";
+            await this.delayRecursiveCall(
+              this.createMaze(this.boxes[twoNodeTop])
+            );
           }
         }
       }
@@ -39,10 +47,14 @@ class RecursiveBacktracker {
       // Right
       if (dir == 2) {
         if (!checkForRightMost) {
-          if (this.isBoxValid(right)) {
-            this.boxes[right].classList.add("wall");
-            this.boxes[right - 1].classList.add("wall");
-            await this.delayRecursiveCall(this.createMaze(this.boxes[right]));
+          if (this.isBoxValid(twoNodeRight)) {
+            this.boxes[twoNodeRight].classList.add("wall");
+            this.isBoxValid([oneNodeRight])
+              ? this.boxes[oneNodeRight].classList.add("wall")
+              : "";
+            await this.delayRecursiveCall(
+              this.createMaze(this.boxes[twoNodeRight])
+            );
           }
         }
       }
@@ -50,10 +62,14 @@ class RecursiveBacktracker {
       // Down
       if (dir == 3) {
         if (!checkForLastRow) {
-          if (this.isBoxValid(bottom)) {
-            this.boxes[bottom].classList.add("wall");
-            this.boxes[bottom - length].classList.add("wall");
-            await this.delayRecursiveCall(this.createMaze(this.boxes[bottom]));
+          if (this.isBoxValid(twoNodeBottom)) {
+            this.boxes[twoNodeBottom].classList.add("wall");
+            this.isBoxValid([oneNodeBottom])
+              ? this.boxes[oneNodeBottom].classList.add("wall")
+              : "";
+            await this.delayRecursiveCall(
+              this.createMaze(this.boxes[twoNodeBottom])
+            );
           }
         }
       }
@@ -61,10 +77,14 @@ class RecursiveBacktracker {
       // Left
       if (dir == 4) {
         if (!checkForLeftMost) {
-          if (this.isBoxValid(left)) {
-            this.boxes[left].classList.add("wall");
-            this.boxes[left + 1].classList.add("wall");
-            await this.delayRecursiveCall(this.createMaze(this.boxes[left]));
+          if (this.isBoxValid(twoNodeLeft)) {
+            this.boxes[twoNodeLeft].classList.add("wall");
+            this.isBoxValid(oneNodeLeft)
+              ? this.boxes[oneNodeLeft].classList.add("wall")
+              : "";
+            await this.delayRecursiveCall(
+              this.createMaze(this.boxes[twoNodeLeft])
+            );
           }
         }
       }
@@ -92,7 +112,7 @@ class RecursiveBacktracker {
     return (
       !this.boxes[index].classList.contains("wall") &&
       !this.boxes[index].classList.contains("start") &&
-      !this.boxes[index].classList.contains("wall")
+      !this.boxes[index].classList.contains("end")
     );
   }
 
